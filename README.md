@@ -3,7 +3,7 @@
 application demonstrating linking routes, with the devise gem to handle user accounts.
 
 ## Navbar
-```html
+```ruby
   <ul class="nav navbar-nav">
     <li class="active"><%= link_to 'Games', games_path %></li>
     <li><%= link_to 'New Game', new_game_path %></li>
