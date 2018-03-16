@@ -1,0 +1,6 @@
+<h1>Games Index</h1>
+
+<% @games.each do |game| %>
+<h2> <a href="/games/<%= game.id %>"><%= game.name %></a> </h2>
+<p><%= game.summary %></p>
+<% end %>
