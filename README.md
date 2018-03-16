@@ -1,24 +1,60 @@
-# README
+# sparta-devise-asset-pipeline
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+application demonstrating linking routes, with the devise gem to handle user accounts.
 
-Things you may want to cover:
+## Navbar
+```html
+  <ul class="nav navbar-nav">
+    <li class="active"><%= link_to 'Games', games_path %></li>
+    <li><%= link_to 'New Game', new_game_path %></li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    <% if user_signed_in? %>
+    <li>Logged in as: <%= current_user.email %></li>
+    <li>Username: <%= current_user.username %></li>
 
-* Ruby version
+    <li><%= link_to 'Edit Profile', edit_user_registration_path %></li>
+    <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
+    <% else %>
+    <li><%= link_to 'Sign up', new_user_registration_path %></li>
+    <li><%= link_to 'Log in', new_user_session_path %></li>
 
-* System dependencies
+    <% end %>
+  </ul>
+```
+demonstrates how to link to certain pages within the navbar.
 
-* Configuration
+## Controller
+```ruby
+  def game_params
+    params.require(:game).permit(:name,:summary,:release_date,:rating,:user_id)
+  end
+```
+defines parameters to be accepted from form submission
+```ruby
+  def index
+    if current_user
+      @games = current_user.games
+    else
+      @games = []
+    end
+  end
+```
+makes database accessible in the index
+```ruby
+  def create
+    @game = Game.new(game_params)
+    @game.user = current_user
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    respond_to do |format|
+      if @game.save
+        format.html { redirect_to @game, notice: 'Game was successfully created.' }
+        format.json { render :show, status: :created, location: @game }
+      else
+        format.html { render :new }
+        format.json { render json: @game.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+```
+autofills the user when creating a new game

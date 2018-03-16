@@ -30,11 +30,7 @@
     <%= form.label :rating %>
     <%= form.number_field :rating, id: :game_rating %>
   </div>
-
-  <div class="field">
-    <%= form.collection_select(:user_id, User.all, :id, :username, { :prompt => 'Select a User', :selected => @game.user_id }) %>
-  </div>
-
+  
   <div class="actions">
     <%= form.submit %>
   </div>
